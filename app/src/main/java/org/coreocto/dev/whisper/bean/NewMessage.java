@@ -9,15 +9,25 @@ public class NewMessage {
     private String to;
     private String content;
     private long createDt;
+    private int status;
 
-    public NewMessage(String from, String to, String content, long createDt) {
+    public NewMessage(String from, String to, String content, long createDt, int status) {
         this.from = from;
         this.to = to;
         this.content = content;
         this.createDt = createDt;
+        this.status = status;
     }
 
     public NewMessage() {
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getFrom() {

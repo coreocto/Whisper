@@ -10,6 +10,7 @@ public class Constants {
     public static final String FB_TABLE_CONVERSATION = "tconversations";
     public static final String FB_TABLE_USER = "tusers";
     public static final String EXTRA_RECIPIENT = "RECIPIENT";
+    public static final String EXTRA_FROM = "FROM";
     public static final String APP_SHARED_PREF = "app_pref";
     public static final String APP_PREF_FIREBASE_TOKEN = "firebase_token";
 

@@ -1,5 +1,8 @@
 package org.coreocto.dev.whisper.activity;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +13,8 @@ import android.view.View;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,10 +37,44 @@ public class SignInActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     private static final String TAG = "SignInActivity";
 
+    public boolean isGooglePlayServicesAvailable(final Activity activity) {
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int status = googleApiAvailability.isGooglePlayServicesAvailable(activity);
+        if (status != ConnectionResult.SUCCESS) {
+            if (googleApiAvailability.isUserResolvableError(status)) {
+                Dialog errorDialog = googleApiAvailability.getErrorDialog(activity, status, 2404);
+                // OnDismissListener will not be invoked if user dismissed the dialog by clicking outside of the dialog
+                errorDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        activity.finish();
+                    }
+                });
+                errorDialog.setCancelable(false);
+                errorDialog.show();
+            }
+            return false;
+        }
+        return true;
+    }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        if (!googleServiceAvailable) {
+//            finish();
+//        }
+//    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        // google play service availability check
+        if (!isGooglePlayServicesAvailable(this)) {
+            return; //skip the rest code within this method
+        }
 
         SignInButton btnSignIn = (SignInButton) findViewById(R.id.sign_in_button);
         btnSignIn.setSize(SignInButton.SIZE_WIDE);
