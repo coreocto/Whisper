@@ -10,13 +10,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseListOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -167,8 +171,8 @@ public class UsersActivity extends AppCompatActivity {
                                     found = true;
                                     break;
                                 }
-                            }else if (val instanceof HashMap){
-                                HashMap<String,Object> data = (HashMap<String, Object>)val;
+                            } else if (val instanceof HashMap) {
+                                HashMap<String, Object> data = (HashMap<String, Object>) val;
                                 String recipient = (String) data.get("recipient");
                                 Log.d(TAG, "recipient = " + recipient);
                                 if (messageFrom.equalsIgnoreCase(recipient)) {
@@ -207,126 +211,10 @@ public class UsersActivity extends AppCompatActivity {
         fabAddContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
-                View mView = layoutInflaterAndroid.inflate(R.layout.user_input_dialog_box, null);
-
-                final EditText etUserInputDialog = (EditText) mView.findViewById(R.id.userInputDialog);
-                final TextView tvDialogTitle = (TextView) mView.findViewById(R.id.dialogTitle);
-
-                tvDialogTitle.setText("Add New Contact");
-                etUserInputDialog.setHint("Enter email here....");
-
-                AlertDialog inputDialog = new AlertDialog.Builder(c)
-                        .setView(mView)
-                        .setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialogBox, int id) {
-
-                                final String s = etUserInputDialog.getText().toString().trim();
-
-                                if (s.isEmpty()) {
-
-                                } else {
-
-                                    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-                                    final String curUserEmail = firebaseUser.getEmail();
-
-                                    //same email
-                                    if (s.equalsIgnoreCase(curUserEmail)) {
-                                        UiUtil.showModalError(c, "This app does not support self talking yet!!");
-                                        return;
-                                    }
-                                    //
-
-                                    //check existence of user
-                                    Query chkUserQry = FirebaseDatabase.getInstance().getReference().child(Constants.FB_TABLE_USER)
-                                            .orderByChild("email")
-                                            .equalTo(s);
-
-                                    chkUserQry.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                            if (dataSnapshot.getChildrenCount() > 0) {
-
-                                                Query chkContactQry = FirebaseDatabase.getInstance().getReference().child(Constants.FB_TABLE_CONTACT)
-                                                        .orderByChild("email")
-                                                        .equalTo(curUserEmail);
-
-                                                chkContactQry.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                                        //check given email exists in contact list
-                                                        boolean found = false;
-
-                                                        Log.d(TAG, dataSnapshot.getChildrenCount() + "");
-                                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                                            String recipient = (String) snapshot.child("recipient").getValue();
-                                                            Log.d(TAG, "recipient = " + recipient);
-                                                            if (s.equalsIgnoreCase(recipient)) {
-                                                                found = true;
-                                                                break;
-                                                            }
-//                                                            NewContact curContact = snapshot.getValue(NewContact.class);
-//                                                            if (curContact.getEmail()!=null && curContact.getEmail().equalsIgnoreCase(curUserEmail) && curContact.getRecipient()!=null && curContact.getRecipient().equalsIgnoreCase(s)){
-//                                                                found = true;
-//                                                                break;
-//                                                            }
-                                                        }
-
-                                                        if (found) {
-                                                            UiUtil.showModalError(c, "User: " + s + " already exists in your contact!!");
-                                                            return;
-                                                        }
-
-                                                        FirebaseDatabase.getInstance()
-                                                                .getReference().child(Constants.FB_TABLE_CONTACT)
-                                                                .push()
-                                                                .setValue(new NewContact(firebaseUser.getEmail(), etUserInputDialog.getText().toString(), new Date().getTime()))
-                                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                    @Override
-                                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                                        startChat(s);
-                                                                    }
-                                                                });
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(DatabaseError databaseError) {
-                                                        Log.e(TAG, databaseError.getDetails());
-                                                    }
-                                                });
-
-
-                                            } else {
-                                                UiUtil.showModalError(c, "User: " + s + " does not exists. Please check again!!");
-                                                return;
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-                                            Log.e(TAG, databaseError.getDetails());
-                                        }
-                                    });
-                                }
-
-
-                            }
-                        })
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialogBox, int id) {
-                                        dialogBox.cancel();
-                                    }
-                                }).create();
-
-                inputDialog.show();
+                showNewContact();
             }
         });
+        fabAddContact.setVisibility(View.INVISIBLE);
 
         mLvContacts = (ListView) findViewById(R.id.lvContact);
 
@@ -376,7 +264,170 @@ public class UsersActivity extends AppCompatActivity {
             }
         });
 
+        registerForContextMenu(mLvContacts);
+
         loadContacts(this);
+    }
+
+    private void showNewContact() {
+        final Activity c = this;
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
+        View mView = layoutInflaterAndroid.inflate(R.layout.user_input_dialog_box, null);
+
+        final EditText etUserInputDialog = (EditText) mView.findViewById(R.id.userInputDialog);
+        final TextView tvDialogTitle = (TextView) mView.findViewById(R.id.dialogTitle);
+
+        tvDialogTitle.setText("New Contact");
+        etUserInputDialog.setHint("Enter email here....");
+
+        AlertDialog inputDialog = new AlertDialog.Builder(c)
+                .setView(mView)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogBox, int id) {
+
+                        final String s = etUserInputDialog.getText().toString().trim();
+
+                        if (s.isEmpty()) {
+
+                        } else {
+
+                            final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                            final String curUserEmail = firebaseUser.getEmail();
+
+                            //same email
+                            if (s.equalsIgnoreCase(curUserEmail)) {
+                                UiUtil.showModalError(c, "This app does not support self-talking yet!!");
+                                return;
+                            }
+                            //
+
+                            //check existence of user
+                            Query chkUserQry = FirebaseDatabase.getInstance().getReference().child(Constants.FB_TABLE_USER)
+                                    .orderByChild("email")
+                                    .equalTo(s);
+
+                            chkUserQry.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    if (dataSnapshot.getChildrenCount() > 0) {
+
+                                        Query chkContactQry = FirebaseDatabase.getInstance().getReference().child(Constants.FB_TABLE_CONTACT)
+                                                .orderByChild("email")
+                                                .equalTo(curUserEmail);
+
+                                        chkContactQry.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                //check given email exists in contact list
+                                                boolean found = false;
+
+                                                Log.d(TAG, dataSnapshot.getChildrenCount() + "");
+                                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                    String recipient = (String) snapshot.child("recipient").getValue();
+                                                    Log.d(TAG, "recipient = " + recipient);
+                                                    if (s.equalsIgnoreCase(recipient)) {
+                                                        found = true;
+                                                        break;
+                                                    }
+//                                                            NewContact curContact = snapshot.getValue(NewContact.class);
+//                                                            if (curContact.getEmail()!=null && curContact.getEmail().equalsIgnoreCase(curUserEmail) && curContact.getRecipient()!=null && curContact.getRecipient().equalsIgnoreCase(s)){
+//                                                                found = true;
+//                                                                break;
+//                                                            }
+                                                }
+
+                                                if (found) {
+                                                    UiUtil.showModalError(c, "User: " + s + " already exists in your contact!!");
+                                                    return;
+                                                }
+
+                                                FirebaseDatabase.getInstance()
+                                                        .getReference().child(Constants.FB_TABLE_CONTACT)
+                                                        .push()
+                                                        .setValue(new NewContact(firebaseUser.getEmail(), etUserInputDialog.getText().toString(), new Date().getTime()))
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                startChat(s);
+                                                            }
+                                                        });
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+                                                Log.e(TAG, databaseError.getDetails());
+                                            }
+                                        });
+
+
+                                    } else {
+                                        UiUtil.showModalError(c, "User: " + s + " does not exists. Please check again!!");
+                                        return;
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Log.e(TAG, databaseError.getDetails());
+                                }
+                            });
+                        }
+
+
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
+                            }
+                        }).create();
+
+        inputDialog.show();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == mLvContacts.getId()) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+            final NewContact curObj = mListAdapter.getItem(info.position);
+
+            menu.setHeaderTitle(curObj.getRecipient());
+
+            menu.add(Menu.NONE, 0, 0, "Delete");
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem menuItem) {
+        Log.d(TAG, "item" + menuItem.getItemId() + " is selected");
+        if (menuItem.getItemId() == 0) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Confirm Delete")
+                    .setMessage("Are you sure to delete this contact?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            AuthUI.getInstance()
+                                    .signOut(UsersActivity.this)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            // user is now signed out
+                                            finish();
+                                        }
+                                    });
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        }
+        return super.onContextItemSelected(menuItem);
     }
 
     @Override
@@ -393,6 +444,50 @@ public class UsersActivity extends AppCompatActivity {
         super.onStop();
         if (mListAdapter != null) {
             mListAdapter.stopListening();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.menu_sign_out:
+                new AlertDialog.Builder(this)
+                        .setTitle("Confirm sign out")
+                        .setMessage("Are you sure to sign out of the app?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                AuthUI.getInstance()
+                                        .signOut(UsersActivity.this)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                // user is now signed out
+                                                finish();
+                                            }
+                                        });
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+                return true;
+            case R.id.menu_new_contact:
+                showNewContact();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

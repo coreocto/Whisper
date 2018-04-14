@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.coreocto.dev.whisper.Constants;
 import org.coreocto.dev.whisper.R;
 import org.coreocto.dev.whisper.bean.NewUser;
+import org.coreocto.dev.whisper.bean.Settings;
 import org.coreocto.dev.whisper.util.DateTimeUtil;
 import org.coreocto.dev.whisper.util.UiUtil;
 
@@ -101,6 +102,8 @@ public class SignInActivity extends AppCompatActivity {
             UiUtil.showToast(SignInActivity.this, "Welcome " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
             checkUserRecord(true);
         }
+
+        this.printSettings();
 
         //checkUserRecord(false);
     }
@@ -178,5 +181,16 @@ public class SignInActivity extends AppCompatActivity {
                 // ...
             }
         }
+    }
+
+    private void printSettings() {
+        Settings settings = Settings.getInstance(this);
+        Log.d(TAG, "UiFontSize = " + settings.getUiFontSize() +
+                "\nSstEnabled = " + settings.isSttEnabled() +
+                "\nSstLang = " + settings.getSttLang() +
+                "\nTtsEnabled = " + settings.isTtsEnabled() +
+                "\nTtsLang = " + settings.getTtsLang() +
+                "\nFbOnTouch = " + settings.getFbOnTouch()
+        );
     }
 }

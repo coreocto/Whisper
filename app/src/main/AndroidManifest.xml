@@ -3,6 +3,7 @@
     package="org.coreocto.dev.whisper">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="true"
@@ -22,29 +23,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.ChatActivity">
-        </activity>
-        <activity
-            android:name=".activity.UsersActivity">
-        </activity>
-        <service
-            android:name=".fcm.WhisperMessagingService">
+            android:name=".activity.ChatActivity"
+            android:parentActivityName=".activity.UsersActivity"></activity>
+        <activity android:name=".activity.UsersActivity" />
+
+        <service android:name=".fcm.WhisperMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".fcm.WhisperInstanceIdService">
+        <service android:name=".fcm.WhisperInstanceIdService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <!--<meta-data-->
-            <!--android:name="com.google.firebase.messaging.default_notification_icon"-->
-            <!--android:resource="@drawable/ic_stat_notification" />-->
+        <!-- <meta-data -->
+        <!-- android:name="com.google.firebase.messaging.default_notification_icon" -->
+        <!-- android:resource="@drawable/ic_stat_notification" /> -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".activity.SettingsActivity"></activity>
     </application>
 
 </manifest>

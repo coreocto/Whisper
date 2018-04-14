@@ -25,4 +25,27 @@
     <string name="title_activity_chat">ChatActivity</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <string name="pref_user_interface">User Interface</string>
+    <string name="pref_ui_font_size">Font Size</string>
+
+    <string name="pref_stt">Speech to Text</string>
+    <string name="pref_stt_switch">Enable</string>
+    <string name="pref_stt_lang">Language</string>
+
+    <string name="pref_tts">Text to Speech</string>
+    <string name="pref_tts_switch">Enable</string>
+    <string name="pref_tts_lang">Language</string>
+
+    <string name="pref_feedback">Feedback</string>
+    <string name="pref_fb_ontouch">On Touch</string>
+
+    <string name="opts_values_font_size_default">1</string>
+    <string name="opts_values_stt_lang_default">en-US</string>
+    <string name="opts_values_tts_lang_default">en-US</string>
+    <string name="opts_values_fb_type_default">2</string>
+
 </resources>

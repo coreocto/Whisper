@@ -1,0 +1,55 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_user_interface">
+
+        <ListPreference
+            android:defaultValue="@string/opts_values_font_size_default"
+            android:entries="@array/opts_font_size"
+            android:entryValues="@array/opts_values_font_size"
+            android:key="ui.fontsize"
+            android:title="@string/pref_ui_font_size"
+            android:summary="%s"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_stt">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="stt.switch"
+            android:title="@string/pref_stt_switch" />
+
+        <ListPreference
+            android:entries="@array/opts_stt_lang"
+            android:entryValues="@array/opts_values_stt_lang"
+            android:key="stt.lang"
+            android:title="@string/pref_stt_lang"
+            android:defaultValue="@string/opts_values_stt_lang_default"
+            android:summary="%s"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_tts">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="tts.switch"
+            android:title="@string/pref_tts_switch" />
+
+        <ListPreference
+            android:entries="@array/opts_tts_lang"
+            android:entryValues="@array/opts_values_tts_lang"
+            android:key="tts.lang"
+            android:title="@string/pref_tts_lang"
+            android:defaultValue="@string/opts_values_tts_lang_default"
+            android:summary="%s"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_feedback">
+        <ListPreference
+            android:entries="@array/opts_fb_type"
+            android:entryValues="@array/opts_values_fb_type"
+            android:key="fb.type"
+            android:title="@string/pref_fb_ontouch"
+            android:defaultValue="@string/opts_values_fb_type_default"
+            android:summary="%s"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

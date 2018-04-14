@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="opts_font_size">
+        <item>Normal</item>
+        <item>Large</item>
+        <item>Extra</item>
+    </string-array>
+    <string-array name="opts_values_font_size">
+        <item>1</item>
+        <item>1.5</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="opts_stt_lang">
+        <item>English</item>
+        <item>Cantonese</item>
+        <item>Mandarin</item>
+    </string-array>
+    <string-array name="opts_values_stt_lang">
+        <item>en-US</item>
+        <item>yue-Hant-HK</item>
+        <item>cmn-Hans-HK</item>
+    </string-array>
+
+    <string-array name="opts_tts_lang">
+        <item>English</item>
+        <item>Cantonese</item>
+        <item>Mandarin</item>
+    </string-array>
+    <string-array name="opts_values_tts_lang">
+        <item>en-US</item>
+        <item>yue-Hant-HK</item>
+        <item>cmn-Hans-HK</item>
+    </string-array>
+
+    <string-array name="opts_fb_type">
+        <item>Disabled</item>
+        <item>Normal</item>
+        <item>Strong</item>
+    </string-array>
+    <string-array name="opts_values_fb_type">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+</resources>

@@ -51,6 +51,7 @@
             android:tint="@color/fui_bgGoogle"
             app:backgroundTint="@color/fui_bgPhone"
             app:srcCompat="@android:drawable/ic_input_add" />
+
     </LinearLayout>
 </RelativeLayout>
 

@@ -1,6 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:title="New Contact" app:showAsAction="ifRoom"
+        android:id="@+id/menu_new_contact"/>
+
+    <item android:title="Settings" app:showAsAction="never"
+        android:id="@+id/menu_settings"/>
+
     <item android:title="Sign out" app:showAsAction="never"
         android:id="@+id/menu_sign_out"/>
 

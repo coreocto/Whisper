@@ -1,5 +1,7 @@
 package org.coreocto.dev.whisper.bean;
 
+import java.util.Objects;
+
 /**
  * Created by John on 3/20/2018.
  */
@@ -10,7 +12,6 @@ public class NewMessage {
     private String content;
     private long createDt;
     private int status;
-
     public NewMessage(String from, String to, String content, long createDt, int status) {
         this.from = from;
         this.to = to;
@@ -18,8 +19,24 @@ public class NewMessage {
         this.createDt = createDt;
         this.status = status;
     }
-
     public NewMessage() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NewMessage that = (NewMessage) o;
+        return createDt == that.createDt &&
+                Objects.equals(from, that.from) &&
+                Objects.equals(to, that.to) &&
+                Objects.equals(content, that.content);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(from, to, content, createDt);
     }
 
     public int getStatus() {
