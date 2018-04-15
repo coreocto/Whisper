@@ -12,7 +12,7 @@ public class Settings {
         this.ctx = ctx;
     }
 
-//    private static Settings instance = null;
+    //    private static Settings instance = null;
     private SharedPreferences sharedPreferences = null;
     private Context ctx = null;
 
@@ -22,6 +22,7 @@ public class Settings {
     public static final String KEY_TTS_SWITCH = "tts.switch";
     public static final String KEY_TTS_LANG = "tts.lang";
     public static final String KEY_FB_ONTOUCH = "fb.type";
+    public static final String KEY_FB_VIBRATE_ON_CLICK = "fb.vibrate_on_click";
 
     public static Settings getInstance(Context ctx) {
 //        if (instance == null) {
@@ -53,5 +54,9 @@ public class Settings {
 
     public String getFbOnTouch() {
         return sharedPreferences.getString(KEY_FB_ONTOUCH, ctx.getString(R.string.opts_values_fb_type_default));
+    }
+
+    public boolean isVibrateOnClickEnabled(){
+        return sharedPreferences.getBoolean(KEY_FB_VIBRATE_ON_CLICK, false);
     }
 }

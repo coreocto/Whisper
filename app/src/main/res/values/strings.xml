@@ -47,5 +47,6 @@
     <string name="opts_values_stt_lang_default">en-US</string>
     <string name="opts_values_tts_lang_default">en-US</string>
     <string name="opts_values_fb_type_default">2</string>
+    <string name="pref_vibrate_on_click">Vibrate onClick</string>
 
 </resources>

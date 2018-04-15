@@ -31,6 +31,7 @@ import org.coreocto.dev.whisper.R;
 import org.coreocto.dev.whisper.bean.NewUser;
 import org.coreocto.dev.whisper.bean.Settings;
 import org.coreocto.dev.whisper.util.DateTimeUtil;
+import org.coreocto.dev.whisper.util.HapticUtil;
 import org.coreocto.dev.whisper.util.UiUtil;
 
 public class SignInActivity extends AppCompatActivity {
@@ -67,6 +68,12 @@ public class SignInActivity extends AppCompatActivity {
 //        }
 //    }
 
+    private void doVibrate() {
+        if (Settings.getInstance(this).isVibrateOnClickEnabled()) {
+            HapticUtil.vibrate(this, 100);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,11 +85,12 @@ public class SignInActivity extends AppCompatActivity {
         }
 
         SignInButton btnSignIn = (SignInButton) findViewById(R.id.sign_in_button);
-        btnSignIn.setSize(SignInButton.SIZE_WIDE);
+//        btnSignIn.setSize(SignInButton.SIZE_WIDE);
         btnSignIn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                doVibrate();
                 if (FirebaseAuth.getInstance().getCurrentUser() == null) {
                     // Start sign in/sign up activity
                     startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().build(), RC_SIGN_IN);

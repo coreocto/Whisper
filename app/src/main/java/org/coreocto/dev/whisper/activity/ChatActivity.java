@@ -33,6 +33,7 @@ import org.coreocto.dev.whisper.Constants;
 import org.coreocto.dev.whisper.R;
 import org.coreocto.dev.whisper.bean.NewMessage;
 import org.coreocto.dev.whisper.bean.Settings;
+import org.coreocto.dev.whisper.util.HapticUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -78,6 +79,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void doVibrate() {
+        if (Settings.getInstance(this).isVibrateOnClickEnabled()) {
+            HapticUtil.vibrate(this, 100);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +109,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                doVibrate();
+
                 final String messageText = mMessageArea.getText().toString().trim();
 
                 Settings settings = Settings.getInstance(ChatActivity.this);
@@ -350,6 +360,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if (view instanceof TextView) {
+
+            doVibrate();
+
             TextView txtView = (TextView) view;
 
             final Settings settings = Settings.getInstance(this);

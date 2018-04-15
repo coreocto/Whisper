@@ -7,8 +7,8 @@
             android:entries="@array/opts_font_size"
             android:entryValues="@array/opts_values_font_size"
             android:key="ui.fontsize"
-            android:title="@string/pref_ui_font_size"
-            android:summary="%s"/>
+            android:summary="%s"
+            android:title="@string/pref_ui_font_size" />
 
     </PreferenceCategory>
 
@@ -19,12 +19,12 @@
             android:title="@string/pref_stt_switch" />
 
         <ListPreference
+            android:defaultValue="@string/opts_values_stt_lang_default"
             android:entries="@array/opts_stt_lang"
             android:entryValues="@array/opts_values_stt_lang"
             android:key="stt.lang"
-            android:title="@string/pref_stt_lang"
-            android:defaultValue="@string/opts_values_stt_lang_default"
-            android:summary="%s"/>
+            android:summary="%s"
+            android:title="@string/pref_stt_lang" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_tts">
@@ -34,22 +34,19 @@
             android:title="@string/pref_tts_switch" />
 
         <ListPreference
+            android:defaultValue="@string/opts_values_tts_lang_default"
             android:entries="@array/opts_tts_lang"
             android:entryValues="@array/opts_values_tts_lang"
             android:key="tts.lang"
-            android:title="@string/pref_tts_lang"
-            android:defaultValue="@string/opts_values_tts_lang_default"
-            android:summary="%s"/>
+            android:summary="%s"
+            android:title="@string/pref_tts_lang" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_feedback">
-        <ListPreference
-            android:entries="@array/opts_fb_type"
-            android:entryValues="@array/opts_values_fb_type"
-            android:key="fb.type"
-            android:title="@string/pref_fb_ontouch"
-            android:defaultValue="@string/opts_values_fb_type_default"
-            android:summary="%s"/>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="fb.vibrate_on_click"
+            android:title="@string/pref_vibrate_on_click" />
     </PreferenceCategory>
 
 </PreferenceScreen>

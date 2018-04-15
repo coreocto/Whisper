@@ -36,6 +36,8 @@ import com.google.firebase.database.ValueEventListener;
 import org.coreocto.dev.whisper.Constants;
 import org.coreocto.dev.whisper.R;
 import org.coreocto.dev.whisper.bean.NewContact;
+import org.coreocto.dev.whisper.bean.Settings;
+import org.coreocto.dev.whisper.util.HapticUtil;
 import org.coreocto.dev.whisper.util.UiUtil;
 
 import java.util.Date;
@@ -223,6 +225,8 @@ public class UsersActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
+                doVibrate();
+
                 final NewContact curObj = mListAdapter.getItem(position);
 
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -393,40 +397,40 @@ public class UsersActivity extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId() == mLvContacts.getId()) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-
-            final NewContact curObj = mListAdapter.getItem(info.position);
-
-            menu.setHeaderTitle(curObj.getRecipient());
-
-            menu.add(Menu.NONE, 0, 0, "Delete");
-        }
+//        if (v.getId() == mLvContacts.getId()) {
+//            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+//
+//            final NewContact curObj = mListAdapter.getItem(info.position);
+//
+//            menu.setHeaderTitle(curObj.getRecipient());
+//
+//            MenuItem menuItem = menu.add(Menu.NONE, 0, 0, "Delete");
+//        }
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem menuItem) {
-        Log.d(TAG, "item" + menuItem.getItemId() + " is selected");
-        if (menuItem.getItemId() == 0) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Confirm Delete")
-                    .setMessage("Are you sure to delete this contact?")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            AuthUI.getInstance()
-                                    .signOut(UsersActivity.this)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            // user is now signed out
-                                            finish();
-                                        }
-                                    });
-                        }
-                    })
-                    .setNegativeButton("No", null)
-                    .show();
-        }
+//        Log.d(TAG, "item" + menuItem.getItemId() + " is selected");
+//        if (menuItem.getItemId() == 0) {
+//            new AlertDialog.Builder(this)
+//                    .setTitle("Confirm Delete")
+//                    .setMessage("Are you sure to delete this contact?")
+//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            AuthUI.getInstance()
+//                                    .signOut(UsersActivity.this)
+//                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                        public void onComplete(@NonNull Task<Void> task) {
+//                                            // user is now signed out
+//                                            finish();
+//                                        }
+//                                    });
+//                        }
+//                    })
+//                    .setNegativeButton("No", null)
+//                    .show();
+//        }
         return super.onContextItemSelected(menuItem);
     }
 
@@ -455,8 +459,17 @@ public class UsersActivity extends AppCompatActivity {
         return true;
     }
 
+    private void doVibrate() {
+        if (Settings.getInstance(this).isVibrateOnClickEnabled()) {
+            HapticUtil.vibrate(this, 100);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        doVibrate();
+
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menu_settings:

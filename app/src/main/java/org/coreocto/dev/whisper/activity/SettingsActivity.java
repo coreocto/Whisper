@@ -10,10 +10,11 @@ import android.util.Log;
 
 import org.coreocto.dev.whisper.R;
 import org.coreocto.dev.whisper.bean.Settings;
+import org.coreocto.dev.whisper.util.HapticUtil;
 import org.coreocto.dev.whisper.util.UiUtil;
 
 public class SettingsActivity extends AppCompatPreferenceActivity implements
-        SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceChangeListener {
+        SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
     private static final String TAG = "SettingsActivity";
     private SwitchPreference mSttSwitch;
@@ -30,16 +31,22 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements
 
         mUiFontSize = (ListPreference) findPreference(Settings.KEY_UI_FONT_SIZE);
         mUiFontSize.setOnPreferenceChangeListener(this);
+        mUiFontSize.setOnPreferenceClickListener(this);
         mSttSwitch = (SwitchPreference) findPreference(Settings.KEY_STT_SWITCH);
         mSttSwitch.setOnPreferenceChangeListener(this);
+        mSttSwitch.setOnPreferenceClickListener(this);
         mSttLang = (ListPreference) findPreference(Settings.KEY_STT_LANG);
         mSttLang.setOnPreferenceChangeListener(this);
+        mSttLang.setOnPreferenceClickListener(this);
         mTtsSwitch = (SwitchPreference) findPreference(Settings.KEY_TTS_SWITCH);
         mTtsSwitch.setOnPreferenceChangeListener(this);
+        mTtsSwitch.setOnPreferenceClickListener(this);
         mTtsLang = (ListPreference) findPreference(Settings.KEY_TTS_LANG);
         mTtsLang.setOnPreferenceChangeListener(this);
-        mFbOnTouch = (ListPreference) findPreference(Settings.KEY_FB_ONTOUCH);
-        mFbOnTouch.setOnPreferenceChangeListener(this);
+        mTtsLang.setOnPreferenceClickListener(this);
+//        mFbOnTouch = (ListPreference) findPreference(Settings.KEY_FB_ONTOUCH);
+//        mFbOnTouch.setOnPreferenceChangeListener(this);
+//        mFbOnTouch.setOnPreferenceClickListener(this);
     }
 
     @Override
@@ -101,6 +108,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements
         } else if (key.equals(Settings.KEY_TTS_LANG)) {
             return true;
         }
+        return false;
+    }
+
+    private void doVibrate() {
+        if (Settings.getInstance(this).isVibrateOnClickEnabled()) {
+            HapticUtil.vibrate(this, 100);
+        }
+    }
+
+    @Override
+    public boolean onPreferenceClick(Preference preference) {
+        doVibrate();
         return false;
     }
 }
