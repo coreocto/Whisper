@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "341637210531",
+    "firebase_url": "https://whisper-firebase.firebaseio.com",
+    "project_id": "whisper-firebase",
+    "storage_bucket": "whisper-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341637210531:android:9a779791d5606c0c",
+        "android_client_info": {
+          "package_name": "org.coreocto.dev.whisper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "341637210531-4frddu4h59826fkcg4ua0oa3pvkp8i9t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.coreocto.dev.whisper",
+            "certificate_hash": "993a50c24c44c66de901f9e39b5e6d58d97b67a0"
+          }
+        },
+        {
+          "client_id": "341637210531-kg9jfkm7tjg7g3tp2b6ijkmvrqb7ds4e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmdQgNhFuC4sh4MWpqld0LsQ8tB_rhBKk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "341637210531-kg9jfkm7tjg7g3tp2b6ijkmvrqb7ds4e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
